@@ -61,7 +61,7 @@ setwd("~")
 # new column to flag any income values that are negative
 # (i.e. value less than zero dollars). call this new column 
 # 'debt', and set the values to "earning" if the income
-# is negative, or "owing" otherwise. create a 2-way 
+# is non-negative, or "owing" otherwise. create a 2-way 
 # table of sex (table rows) and debt (table columns). report 
 # on the total number of observations in each sub-category at 
 # the command line (it is fine to just print the table using the 
