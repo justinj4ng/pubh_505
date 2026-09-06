@@ -38,8 +38,8 @@ boro_table <-data.frame(
   sum(nyc$boro == "brooklyn"), # 9268
   sum(nyc$boro == "manhattan"), # 4430
   sum(nyc$boro == "queens"), # 7779 
-  sum(nyc$boro == "staten island"))
-)# 1459
+  sum(nyc$boro == "staten island"))# 1459
+)
 
 
 print(boro_table)
@@ -87,8 +87,21 @@ print(sex_debt_table)
 #female   315   14486
 #male     243   11636
 
+# 5.
+# visualize frequency of boros
+
+BORO = c("brooklyn", "bronx", "manhattan", "queens", "staten island")
+SUM = c(
+  sum(nyc$boro == "bronx"), # 3744
+  sum(nyc$boro == "brooklyn"), # 9268
+  sum(nyc$boro == "manhattan"), # 4430
+  sum(nyc$boro == "queens"), # 7779 
+  sum(nyc$boro == "staten island"))# 1459
+
+boro_frq_plot <- barplot(height = SUM, names.arg = BORO, col = "tomato", ylim = c(0, 10000))
+# text()
 
 
-
+# 6.
 
 
