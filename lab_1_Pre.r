@@ -61,8 +61,8 @@ nyc$sex[nyc$sex == "2"] <- "female"
 sex_table <- data.frame(
   SEX = c("male", "female"),
   SUM = c(
-  sum(nyc$sex == "male"),
-  sum(nyc$sex == "female")))
+    sum(nyc$sex == "male"),
+    sum(nyc$sex == "female")))
   
 print(sex_table)  
 #SEX   SUM
@@ -88,9 +88,9 @@ print(sex_debt_table)
 #male     243   11636
 
 # 5.
-# visualize frequency of boros
+# visualize frequency (number of persons) per each boro
 
-BORO = c("brooklyn", "bronx", "manhattan", "queens", "staten island")
+BORO = c("bronx", "brooklyn", "manhattan", "queens", "staten island")
 SUM = c(
   sum(nyc$boro == "bronx"), # 3744
   sum(nyc$boro == "brooklyn"), # 9268
@@ -98,10 +98,65 @@ SUM = c(
   sum(nyc$boro == "queens"), # 7779 
   sum(nyc$boro == "staten island"))# 1459
 
-boro_frq_plot <- barplot(height = SUM, names.arg = BORO, col = "tomato", ylim = c(0, 10000))
+boro_frq_plot <- barplot(height = SUM, names.arg = BORO, col = "tomato", ylab = "placeholder", ylim = c(0, 10000))
 # text()
 
 
 # 6.
+
+# visualize income by boro.show median income. 
+
+# logical indexing, "Give me the income values where boro is "bronx"."
+median_income_by_boro <- c(
+  median(nyc$income[nyc$boro == "bronx"]),
+  median(nyc$income[nyc$boro == "brooklyn"]),
+  median(nyc$income[nyc$boro == "manhattan"]),
+  median(nyc$income[nyc$boro == "queens"]),
+  median(nyc$income[nyc$boro == "staten island"])
+)
+  
+median_income_by_boro
+
+# calc IQR
+IQR_income_by_boro <-c(
+IQR(nyc$income[nyc$boro == "bronx"]),
+IQR(nyc$income[nyc$boro == "brooklyn"]),
+IQR(nyc$income[nyc$boro == "manhattan"]),
+IQR(nyc$income[nyc$boro == "queens"]),
+IQR(nyc$income[nyc$boro == "staten island"])
+)
+
+# build error bars
+lower_bound <- median_income_by_boro - IQR_income_by_boro
+upper_bound <- median_income_by_boro + IQR_income_by_boro
+
+# bars<- boxplot(median_income_by_boro ~ BORO,
+#         data = nyc,
+#         main = "income by boro",
+#         xlab = "boro",
+#         ylab = "income")
+
+bars <- barplot(height = median_income_by_boro,
+                names.arg = BORO,
+                xlab = "boro",
+                ylim = c(0, max(upper_bound) + 2), 
+                main = "income by boro")
+bars
+
+# 7. calculate a representative value of the income within the  broader dataset
+summary(nyc$income)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# -5542   25190   58440   90843  110835 3188008 
+# median
+
+sd(nyc$income)
+#120089.8
+
+# 8. calculate median income 
+median_income_by_boro
+# 37734.5 55452.5 73503.5 62470.0 78592.0
+
+
+
 
 
