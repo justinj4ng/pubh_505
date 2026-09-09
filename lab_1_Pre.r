@@ -6,6 +6,9 @@
 rm(list=ls())
 graphics.off()
 
+#install.packages("doBy")
+library(doBy)
+
 setwd("~/pubh_505")
 
 nyc <- read.csv("NYC_poverty.csv")
@@ -153,9 +156,24 @@ sd(nyc$income)
 #120089.8
 
 # 8. calculate median income 
-median_income_by_boro
+# median_income_by_boro
 # 37734.5 55452.5 73503.5 62470.0 78592.0
 
+# https://www.rdocumentation.org/packages/doBy/versions/1.5/topics/summaryBy
+
+income_boro <- data.frame(
+  INCOME = 
+    (nyc$income[nyc$boro == "bronx"]),
+    (nyc$income[nyc$boro == "brooklyn"]),
+    (nyc$income[nyc$boro == "manhattan"]),
+    (nyc$income[nyc$boro == "queens"]),
+    (nyc$income[nyc$boro == "staten island"]))
+  
+  BORO = c("bronx", "brooklyn", "manhattan", "queens", "staten island")
+)
+
+summary_data <- summaryBy(BORO ~ INCOME, data = income_boro, FUN = list(median))
+print(summary_data)
 
 
 
