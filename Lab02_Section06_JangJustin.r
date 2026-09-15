@@ -78,12 +78,12 @@ print(odds_ratio)
 # [1] 13.96429 times the odds of being tall as basketball player than baseball player
 
 
-# 7. contingency table
+# 7. contingency table, calculate odds ratio
 # basketball/baseball x short/tall
 
 df <- data.frame(
   Sport = yale_subSH$Sport,
-  Height = c(yale_subSH$Height > 75)
+  Height = yale_subSH$Height > 75
   )
 
 my_table <- table(df$Sport, df$Height, dnn = c("Sport","> 75cm vs <= 75cm") )
@@ -97,3 +97,12 @@ oddsratio(my_table)
 # Sport        estimate    lower    upper
 # Baseball    1.00000       NA       NA
 # Basketball 13.34158 5.227217 37.86765
+
+
+# 8. calculate relative risk
+
+riskratio(my_table)
+# risk ratio with 95% C.I.
+# Sport        estimate   lower    upper
+# Baseball    1.00000      NA       NA
+# Basketball  4.78125 2.45929 9.295508
