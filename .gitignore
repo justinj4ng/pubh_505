@@ -1,0 +1,14 @@
+# History and workspace images
+.Rhistory
+.RData
+
+# RStudio project personal settings and cache
+.Rproj.user/
+
+# If you use the renv package for dependency management
+renv/library/
+renv/staging/
+
+# Common OS-generated files
+.DS_Store
+Thumbs.d
