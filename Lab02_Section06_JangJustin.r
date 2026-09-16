@@ -45,64 +45,35 @@ glue("{prob_tall}%")
 # 41.18%
 
 # 5.Relative risk of being tall as a basketball player vs baseball player
-S <- subset(yale_subSH, subset = Sport == "Baseball")
-K <- subset(yale_subSH, subset = Sport == "Basketball")
+bask = yale[which(yale$Sport=="Basketball"), ]
 
-STall <-subset(S, subset = Height > 75) # return df of baseball players > 75
-# head(STall)
-rS<- nrow(STall) / nrow(S) #risk of baseball player being tall
+pTall_gBask = sum(bask$Height>72)/nrow(bask)
 
+base = yale[which(yale$Sport=="Baseball"), ]
+pTall_gBase = sum(base$Height>72)/nrow(base)
 
-KTall <-subset(K, subset = Height > 75)
-rK<- nrow(KTall) / nrow(K) #risk of basketball player being tall
+rrT_gBask_v_Base = pTall_gBask/pTall_gBase
 
-# relative risk
-print(rK/rS)
-# [1] 4.78125
-# 4.78 times more likely to be tall as basketball player than as a baseball player
+rrT_gBase = pTall_gBase / (1-pTall_gBase)
+rrT_gBask = pTall_gBask / (1-pTall_gBask)
 
+glue("{rrT_gBask_v_Base} times more likely to")
 
-# 6. Odds ratio of being tall as a basketball player vs baseball player
-# Odds ratio = odds of tall as basketball player / odds of tall as baseball player
+# 6. odds ratio arithmetic
 
-KShort <- nrow(K) - nrow(KTall) # no. short based on total {sport}ball players - tall {sport}ball players
-SShort <- nrow(S) - nrow(STall)
+oTall_gBase = pTall_gBase / (1-pTall_gBase)
+oTall_gBask = pTall_gBask / (1-pTall_gBask)
 
+orT_gBask_v_Base = oTall_gBask / oTall_gBase
 
-odds_K <- nrow(KTall) / KShort # no. tall basketball players / no. short basketball players
-odds_S <- nrow(STall) / SShort
+glue("{orT_gBask_v_Base} times more likely to")
 
-odds_ratio <- odds_K / odds_S
+yale = subset(yale, subset =Sport %in% c("Baseball","Basketball"))
+yale$Tallness = ifelse(yale$Height>72, "Tall","Short")
 
-print(odds_ratio)
-# [1] 13.96429 times the odds of being tall as basketball player than baseball player
+tbl = table(yale$Sport, yale$Tallness)
 
-
-# 7. contingency table, calculate odds ratio
-# basketball/baseball x short/tall
-
-df <- data.frame(
-  Sport = yale_subSH$Sport,
-  Height = yale_subSH$Height > 75
-  )
-
-my_table <- table(df$Sport, df$Height, dnn = c("Sport","> 75cm vs <= 75cm") )
-  print(my_table)
-  # FALSE TRUE
-  # Baseball      46    8
-  # Basketball    14   34
-  
-oddsratio(my_table)
-# odds ratio with 95% C.I.
-# Sport        estimate    lower    upper
-# Baseball    1.00000       NA       NA
-# Basketball 13.34158 5.227217 37.86765
-
-
-# 8. calculate relative risk
-
-riskratio(my_table)
-# risk ratio with 95% C.I.
-# Sport        estimate   lower    upper
-# Baseball    1.00000      NA       NA
-# Basketball  4.78125 2.45929 9.295508
+# 7.
+oddsratio(tbl)
+# 8.
+riskratio(tbl)
