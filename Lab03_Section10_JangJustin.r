@@ -9,7 +9,7 @@ nhanes = read.csv("NHANES_DemoBMX.csv")
 print(paste(nrow(nhanes), "rows"))
 # 9338 rows
 
-# 2,
+# 2, subset to 3 specified categories
 nhanes = nhanes[,c("riagendr", "ridageyr", "bmxht")] # subset this data-frame
 names(nhanes) <- c("gender", "age", "height")
 nhanes = na.omit(nhanes)
@@ -23,8 +23,7 @@ print(paste(nrow(nhanes), "rows"))
 hist(nhanes$height,
      main = "histogram of height distribution",
      xlab = "height",
-     col = "steelblue",
-     )
+     col = "steelblue")
 
 plot(density(nhanes$height), 
      main = "density plot of height distribution", 
@@ -47,9 +46,9 @@ theoretical_dist= dnorm(heights, mean = mean(heights), sd = sd(heights), log = F
 
 plot(heights,theoretical_dist,
      type = "l",
-     xlab = "Height",
-     ylab = "Density",
-     main = "Theoretical Normal Distribution of Height")
+     xlab = "height",
+     ylab = "density",
+     main = "theoretical normal distribution of height")
 
 # 5. proportion > 175cm
 
@@ -64,7 +63,7 @@ print(paste(tall_percent, "% of individuals in the dataset are over 175cm"))
 
 tall_prob = sum(nhanes$height > 175) / length(nhanes$height)
 
-p1 = dbinom(3, size = 20, prob = tall_prob)
+p1 = pbinom(3, size = 20, prob = tall_prob)
 
 p1
 
@@ -84,6 +83,8 @@ p2
 my_cdf = ecdf(heights)
 percentile_rank = round(my_cdf(180), digits = 3)
 print(percentile_rank * 100)
+
+ # dnorm = 180, 
 
 
 
