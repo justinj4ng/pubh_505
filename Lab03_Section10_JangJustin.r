@@ -31,11 +31,16 @@ plot(density(nhanes$height),
      col = "steelblue", 
      lwd = 2)
 # skewness formula : 3(mean - median) / SD
+# use moments package
 heights = nhanes$height
 n = length(nhanes$height)
 skewness_height = (3*(mean(heights) - median(heights)) / sd(heights))
 
-print(paste(skewness_height, "skewness"))
+print(paste(skewness_height, "skewness, therefore not skewed"))
+
+# skewness()
+
+
 # "-0.0390658133475752 skewness", therefore not skewed
 
 # 4. summary (mean, SD), theoretical distribution line plot
@@ -54,18 +59,19 @@ plot(heights,theoretical_dist,
 
 tall_percent = round(sum(nhanes$height > 175) / length(nhanes$height) * 100, digits = 1)
 
-print(paste(tall_percent, "% of individuals in the dataset are over 175cm"))
+print(paste(tall_percent, "% probability of being over 175cm"))
 
+# "11.2 % probability of being over 175cm"
 
 
 # 6. binomial probability. what is the probability that exactly 3 of the 20 are categorically
 # tall?
-
+#################################################################### check
 tall_prob = sum(nhanes$height > 175) / length(nhanes$height)
 
 p1 = pbinom(3, size = 20, prob = tall_prob)
 
-p1 = round(p1, digits = 2) * 100
+p1 = round(p1, digits = 3) * 100
 
 print(paste(p1, "%"))
 
@@ -77,9 +83,14 @@ print(paste(p1, "%"))
 
 p2 = 1 - pbinom(4, size = 20, prob = tall_prob)
 
-p2
+p2= round(p2, digits = 3) * 100
+
+print(paste(p2, "%"))
+# "6.5 %"
+
 
 # 0.06515883
+
 
 
 # 8. THEORETICAL percentile of 180cm individual
