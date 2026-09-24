@@ -34,7 +34,7 @@ plot(density(nhanes$height),
 # use moments package
 heights = nhanes$height
 n = length(nhanes$height)
-skewness_height = (3*(mean(heights) - median(heights)) / sd(heights))
+skewness_height = ((mean(heights) - median(heights))*3 / sd(heights))
 
 print(paste(skewness_height, "skewness, therefore not skewed"))
 
