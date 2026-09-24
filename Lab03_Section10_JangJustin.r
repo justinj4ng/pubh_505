@@ -84,7 +84,7 @@ my_cdf = ecdf(heights)
 percentile_rank = round(my_cdf(180), digits = 3)
 print(percentile_rank * 100)
 
- # dnorm = 180, 
+ # dnorm = 180,  
 
 
 
