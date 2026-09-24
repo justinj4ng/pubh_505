@@ -83,9 +83,9 @@ p2
 
 
 # 8. THEORETICAL percentile of 180cm individual
-my_cdf = ecdf(heights)
-percentile_rank = round(my_cdf(180), digits = 3)
-print(percentile_rank * 100)
+# my_cdf = ecdf(heights)
+# percentile_rank = round(my_cdf(180), digits = 3)
+# print(percentile_rank * 100)
 
 mean_heights = mean(heights)
 sd_heights = sd(heights)
