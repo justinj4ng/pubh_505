@@ -65,7 +65,10 @@ tall_prob = sum(nhanes$height > 175) / length(nhanes$height)
 
 p1 = pbinom(3, size = 20, prob = tall_prob)
 
-p1
+p1 = round(p1, digits = 2) * 100
+
+print(paste(p1, "%"))
+
 
 # 0.2126903
 
@@ -84,7 +87,15 @@ my_cdf = ecdf(heights)
 percentile_rank = round(my_cdf(180), digits = 3)
 print(percentile_rank * 100)
 
- # dnorm = 180,  
+mean_heights = mean(heights)
+sd_heights = sd(heights)
+
+percentile_180 = pnorm(q = 180, mean_heights, sd_heights, lower.tail = TRUE) * 100
+
+pnorm = round(percentile_180, digits = 1)
+print(paste(pnorm, "%"))
+
+
 
 
 
