@@ -23,12 +23,12 @@ print(paste(nrow(nhanes), "rows"))
 
 hist(nhanes$height,
      main = "histogram of height distribution",
-     xlab = "height",
+     xlab = "height(cm)",
      col = "steelblue")
 
 plot(density(nhanes$height), 
      main = "density plot of height distribution", 
-     xlab = "height", 
+     xlab = "height(cm)", 
      col = "steelblue", 
      lwd = 2)
 
