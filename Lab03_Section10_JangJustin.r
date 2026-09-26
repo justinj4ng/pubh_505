@@ -110,8 +110,8 @@ sd_heights = sd(heights)
 percentile_180 = pnorm(q = 180, mean_heights, sd_heights, lower.tail = TRUE) * 100
 
 pnorm = round(percentile_180, digits = 1)
-print(paste(pnorm, "percentile of an 180cm individual"))
-# "96.1 percentile of an 180cm individual"
+print(paste(pnorm, "percentile for an 180cm individual"))
+# "96.1 percentile for an 180cm individual"
 
 
 
