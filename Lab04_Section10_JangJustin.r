@@ -115,7 +115,7 @@ set.seed(50505) # set seed per prompt
 # generate 20 normally-distributed random values, where the 
 # underlying distribution has a mean value of 68.8 inches, and a
 # standard deviation of 3.8 inches.
-#generate for Hartford males
+#generate for Hartford males  
 h_hfd = rnorm(n = 20, mean = 68.8, sd = 3.8)
 
 mean_hfd = mean(h_hfd)
@@ -147,8 +147,38 @@ tsum.test(
 #   67.72037 71.35711
 # sample estimates:
 #   mean of x 
-# 69.53874 
-# 7. Check your assumptions
+# 69.53874
 
+
+# 7. Check your assumptions
+shapiro.test(h_hfd) # test normality
+# p-value = 0.4464
+#  The data are not adequately normal.
+
+var.test(h_nhv, h_hfd) # test homoskedascity
+# p-value = 0.8002
+# The data are not adequately homskedastic.
 
 # 8. What if the data were paired?
+t.test(h_nhv,
+       h_hfd,
+       alternative = "two.sided",
+       mu = mean_us,
+       paired = TRUE)
+
+# Paired t-test
+
+# data:  h_nhv and h_hfd
+# t = -52.743, df = 19, p-value < 2.2e-16
+# alternative hypothesis: true mean difference is not equal to 69
+# 95 percent confidence interval:
+#   -5.4721366  0.2129099
+# sample estimates:
+#   mean difference 
+# -2.629613 
+
+# 95% confident that the true mean difference between New Haven and Hartford
+# male heights is 2.629613
+
+
+
