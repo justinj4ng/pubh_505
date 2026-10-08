@@ -32,60 +32,57 @@ print(paste(round(sd_nhv, digits = 1),"inches"))
 # 2. Test the hypothesis that NHV males are short
 mean_us = 69
 sd_us = 3
-
 n = 20
 
-# z-test because data is normal distribution
-z = mean_nhv - mean_us
-# z = -2.090875
-CI_plus = mean_nhv + (z / (sd_nhv / sqrt(n)))
-CI_min = mean_nhv - (z / (sd_nhv / sqrt(n)))
+z_value = (mean_nhv - mean_us) / (sd_us / sqrt(n))
 
-z_value = CI_plus-CI_min
-  
-  
-p_nhv = pnorm(z_value)
+p = pnorm(z_value)
 
-print(p_nhv)
-# 1.652718e-07 #### ???????????????????????????
+
+print(p)
+
 
 # interpretation:
+# H0: Mean New Haven height = 69 inches.
+# Ha: Mean New Haven height < 69 inches.
+# Z-statistic = -3.117.
+# P-value = 0.00091.
+# Since p < 0.05, we reject the null hypothesis.
+# There is statistically significant evidence that
+# New Haven males have a mean height below 69 inches.
+
+
+
+
 
 # 3. Test the hypothesis under different circumstances
 
 # t-test because we don't know population SD (sigma)
 
-t = qt(0.025, n - 1)
+t_value = (mean_nhv - mean_us) / (sd_nhv / sqrt(n))
 
-  
-CI_plus_t = mean_nhv + (t / (sd_us / sqrt(n)))
-CI_min_t = mean_nhv - (t / (sd_us / sqrt(n)))
-
-t_value = CI_plus_t - CI_min_t
-
-p_t_nhv = pnorm(t_value)
+p_t_nhv = pt(t_value, df = n - 1)
 
 print(p_t_nhv)
-# 2.185169e-10 #### ?????????????????????????
+
+
+#
+#
+#
+
 
 # 4. Item 2, streamlined
 # syntax:
 # z.test(x, y = NULL, alternative = "two.sided", mu = 0, sigma.x = NULL, sigma.y = NULL, conf.level = 0.95)
 z.test(x = h_nhv, y = NULL,
-       alternative = "two.sided",
+       alternative = "less",
        mu = mean_us,
        sigma.x = sd_us,
        conf.level = 0.95)
+
 ### One-sample z-Test
 
-# data:  h_nhv
-# z = -3.1169, p-value = 0.001828
-# alternative hypothesis: true mean is not equal to 69
-# 95 percent confidence interval:
-#   65.59434 68.22391
-# sample estimates:
-#   mean of x 
-# 66.90913 
+
 
 
 # 5, Item 3, streamlined
@@ -95,19 +92,13 @@ tsum.test(
   s.x = sd_nhv,          # Sample standard deviation
   n.x = n,           # Sample size
   mu = mean_us,           # Hypothesized population mean
-  alternative = "two.sided", # "two.sided", "less", or "greater"
+  alternative = "less", # "two.sided", "less", or "greater"
   conf.level = 0.95   # Confidence level
   )
-# One-sample t-Test
-# 
-# data:  Summarized x
-# t = -2.5526, df = 19, p-value = 0.01945
-# alternative hypothesis: true mean is not equal to 69
-# 95 percent confidence interval:
-#   65.19468 68.62357
-# sample estimates:
-#   mean of x 
-# 66.90913 
+
+# t = -2.5526, df = 19, p-value = 0.009726
+
+
 
 # 6. What about HFD-area males
 set.seed(50505) # set seed per prompt
@@ -125,60 +116,42 @@ print(paste(round(mean_hfd, digits = 1),"inches"))
 print(paste(round(sd_hfd, digits = 1),"inches"))
 
 
-tsum.test(
-  mean.x = mean_hfd,       # Sample mean
-  s.x = sd_hfd,          # Sample standard deviation
-  n.x = n,           # Sample size
-  mu = mean_nhv,           # Hypothesized population mean
-  alternative = "two.sided", # "two.sided", "less", or "greater"
-  conf.level = 0.95)
+t.test(
+  h_nhv,
+  h_hfd,
+  alternative = "two.sided",
+  var.equal = TRUE
+)
+# t = -2.0281, df = 38, p-value = 0.0496
 
-# p-value = 0.006937
-# We are 95% confident that NHV male mean height lies in the interval of BHD
-# male heights. ######## CHECK
 
-# output:
-# One-sample t-Test
-# 
-# data:  Summarized x
-# t = 3.0268, df = 19, p-value = 0.006937
-# alternative hypothesis: true mean is not equal to 66.90913
-# 95 percent confidence interval:
-#   67.72037 71.35711
-# sample estimates:
-#   mean of x 
-# 69.53874
+
+
+
+
+
+
 
 
 # 7. Check your assumptions
 shapiro.test(h_hfd) # test normality
-# p-value = 0.4464
-#  The data are not adequately normal.
+shapiro.test(h_hfd)
 
-var.test(h_nhv, h_hfd) # test homoskedascity
+# p = 0.4464. We fail to reject the null hypothesis of normality.
+# There is insufficient evidence to conclude that the Hartford
+# heights deviate from a normal distribution.
+
+var.test(h_nhv, h_hfd)
 # p-value = 0.8002
 # The data are not adequately homskedastic.
+
+
 
 # 8. What if the data were paired?
 t.test(h_nhv,
        h_hfd,
        alternative = "two.sided",
-       mu = mean_us,
-       paired = TRUE)
-
-# Paired t-test
-
-# data:  h_nhv and h_hfd
-# t = -52.743, df = 19, p-value < 2.2e-16
-# alternative hypothesis: true mean difference is not equal to 69
-# 95 percent confidence interval:
-#   -5.4721366  0.2129099
-# sample estimates:
-#   mean difference 
-# -2.629613 
-
-# 95% confident that the true mean difference between New Haven and Hartford
-# male heights is 2.629613
-
-
+       mu = 0,
+       paired = TRUE
+       )
 
