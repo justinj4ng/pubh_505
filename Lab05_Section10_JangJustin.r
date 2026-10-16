@@ -29,7 +29,7 @@ noaa_summer = subset(
     Year >= 1980 & Year <= 2000 &
     City %in% c("NYC", "MIA", "LAX", "STL")
 )
-
+cat(nrow(noaa_summer), "252 observations remain.")
 print(table(noaa_summer$City))
 
 # Result: 252 observations remain.
@@ -48,9 +48,14 @@ cat("ANOVA p-value for City:", format.pval(anova_p))
 
 print("There is a statistically significant difference in temperature among cities.")
 
-# Result: p-value = 2.22e-16.
+# ANOVA p-value for City: < 2.22e-16
+# There is a statistically significant difference in temperature among cities.
+
 # Reject the null hypothesis. Mean summer temperatures differ
 # significantly among at least some of the four cities.
+
+
+
 
 # 4. check normality of ANOVA residuals using skewness
 
@@ -65,11 +70,15 @@ cat("Residual skewness:", round(skewness, 4), "\n")
 
 print("Residual skewness is within the threshold. The normality assumption is reasonable based on skewness.")
 
+# Residual skewness: -0.0321 
+# Residual skewness is within the threshold. The normality assumption is reasonable based on skewness.
 
-# Result: skewness is approximately -0.0321.
+
 # Since its absolute value is less than 0.4, residual skewness
 # is small and does not indicate substantial asymmetry.
 # The ANOVA is reasonable based on this skewness check alone.
+
+
 
 # 5. Tukey HSD pairwise comparisons
 
@@ -85,6 +94,7 @@ print(paste("Estimated difference (NYC - LAX):", nyc_lax))
 
 nyc_lax = tukey_result$City["NYC-LAX", ]
 
+
 if (nyc_lax["p adj"] < 0.05) {
   cat(
     "NYC and LAX are significantly different.",
@@ -95,8 +105,10 @@ if (nyc_lax["p adj"] < 0.05) {
   print("NYC and LAX: Not Different")
 }
 
+# NYC and LAX: Not Different
+
 # Result: NYC and LAX are Not Different at alpha = 0.05.
-# The estimated difference is approximately 1.0079 degrees,
+# estimated difference ~ 1.0079 degrees,
 # but the adjusted p-value is 0.2306, so it is not significant.
 
 
@@ -110,6 +122,12 @@ noaa_summer$Feel = ifelse(
 feel_table = table(noaa_summer$City, noaa_summer$Feel)
 
 print(feel_table)
+# cool hot nice
+# LAX    8   2   53
+# MIA    0  61    2
+# NYC    3   3   57
+# STL    8   4   51
+
 
 # Quality control: MIA has 61 hot observations and 2 nice
 # observations. It has 0 cool observations.
@@ -131,7 +149,9 @@ if (chi_p < 0.05) {
   print("There is no statistically significant association between city and temperature category.")
 }
 
-# Result: p-value = 2.22e-16 .
+# Chi-square p-value for City: < 2.22e-16
+# There is a statistically significant association between city and temperature category.
+
 # Reject the null hypothesis of independence. The distribution
 # of cool, nice, and hot observations differs significantly
 # among cities.
@@ -159,7 +179,12 @@ if (cells_below_one == 0 && percent_below_five <= 20) {
   print("The expected-count assumptions are not satisfied.")
 }
 
-# Result: 0 cells have expected counts below 1.
-# 4 of 12 cells (33.33%) have expected counts below 5.
+# Cells with expected counts below 1: 0
+# Cells with expected counts below 5: 4
+# Total number of cells: 12 
+# Percent of cells below 5: 33.33333 %
+# The expected-count assumptions are not satisfied.
+
+
 # The expected-count assumption is not satisfied because
 # more than 20% of cells have expected counts below 5.
