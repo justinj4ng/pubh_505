@@ -14,9 +14,10 @@ noaa_longformat = read.csv("NOAA_longformat.csv")
 
 noaa_clean = na.omit(noaa_longformat)
 
+cat(nrow(noaa_clean),"observations remain after removing missing data")
 print(table(noaa_clean$City))
 
-# Result: 11,771 observations remain after removing missing data.
+# Result: 11771 observations remain after removing missing data.
 # ARK = 1181, DAK = 1200, LAS = 1136, LAX = 1164,
 # MIA = 1173, NYC = 1200, SEA = 1199, STL = 1183,
 # VTX = 1165, WOH = 1170.
