@@ -41,14 +41,14 @@ anova_model = aov(Temperature ~ City, data = noaa_summer)
 
 anova_result = summary(anova_model)
 
-anova_p = anova_result[[1]]["City", "Pr(>F)"]
+anova_p = anova_result[[1]][1,5]
 
 print(anova_result)
-cat("ANOVA p-value for City:", format.pval(anova_p))
+cat("ANOVA p-value for City:", anova_p)
 
 print("There is a statistically significant difference in temperature among cities.")
 
-# ANOVA p-value for City: < 2.22e-16
+# ANOVA p-value for City: 2.707906e-46
 # There is a statistically significant difference in temperature among cities.
 
 # Reject the null hypothesis. Mean summer temperatures differ
@@ -141,7 +141,7 @@ print(chi_result)
 
 chi_p = chi_result$p.value
 
-cat("Chi-square p-value for City:", format.pval(chi_p), "\n")
+cat("Chi-square p-value for City:", chi_p, "\n")
 
 if (chi_p < 0.05) {
   print("There is a statistically significant association between city and temperature category.")
@@ -149,7 +149,7 @@ if (chi_p < 0.05) {
   print("There is no statistically significant association between city and temperature category.")
 }
 
-# Chi-square p-value for City: < 2.22e-16
+# Chi-square p-value for City: 3.068701e-41 
 # There is a statistically significant association between city and temperature category.
 
 # Reject the null hypothesis of independence. The distribution
