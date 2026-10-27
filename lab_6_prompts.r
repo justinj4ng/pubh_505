@@ -78,6 +78,9 @@ setwd("~/lab_6/")
 # report on these results at the command line, and place a 
 # comment below the code segment to document this result
 
+yale = yale[which(yale$Sport %in% c("Baseball", "Football")),]
+yale$Year = as.factor(yale$Year)
+aov(Height~Sport + Year, data=yale)
 
 # 7. re-run your two-way ANOVA, but this time reverse the
 # order of your predictors (i.e. Year + Sport). report the 
