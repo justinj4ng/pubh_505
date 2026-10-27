@@ -5,6 +5,7 @@
 rm(list=ls())
 graphics.off()
 
+library(moments)
 setwd("~/pubh_505")
 
 # 1. subsetting
@@ -17,39 +18,78 @@ base = yale$Height[yale$Sport == "Baseball"]
 
 foot = yale$Height[yale$Sport == "Football"]
 
-length(base)
-length(foot)
+cat(length(base),"\n")
+cat(length(foot),"\n")
 
 # 2. are the distributions normal?
-# shapiro-wilk test tests whether a dataset comes from a normal distribution
+# Use skewness() from moments
 
-SW_P_base = shapiro.test(base)$p.value
-SW_P_foot = shapiro.test(foot)$p.value
+skew_base = abs(skewness(base, na.rm = T))
+# 0.2161072
+skew_foot = abs(skewness(foot, na.rm = T))
+# 0.3848342
 
-cat("Shapiro-Wilk test for baseball heights. P-value:", SW_P_base,"There is insufficient evidence that the data deviate from normality.\n")
-cat("Shapiro-Wilk test for football heights. P-value:", SW_P_foot,"There is insufficient evidence that the data deviate from normality.\n")
 
-# p-value < 0.05: fail to reject H_O; insufficient evidence that the data deviate from normality.
+# F-test to compare variances
+Ftest = var.test(base, foot)
+
+
+
+cat("Skewness of baseball heights",skew_base, "\n")
+cat("Skewness of football heights", skew_foot, "\n")
+cat("The distributions of baseball and football heights are sufficiently homoskedastic.")
+
+cat("P-value:", Ftest$p.value, "; there is insufficient evidence that the variances differ.")
 
 
 # 3. hypothesis test. t-test
 
-# 
-# equal variance?
-t.test(base, foot, var.equal = F)
+# distributions are symmetric
+# equal variance
+
+Ttest = t.test(base,
+        foot,
+        alternative = "two.sided",
+        var.equal = T)
+
+cat("P-value:", Ttest$p.value, "; there is insufficient evidence that there is a difference between baseball and football heights")
+
+
 
 
 # 4. 1-way ANOVA
 
+model1 = aov(Height ~ Sport, data = yale)
+print(summary(model1))
+p_anova1 = summary(model1)[[1]]["Sport", "Pr(>F)"]
+cat("P-value:", p_anova1,"; there is insufficient evidence of a statistically significant difference in mean height between baseball and football players ", "\n")
+
+
 # 5. test skewness of residuals, is ANOVA justified?
 
-#5. 2-way ANOVA
+skew_resid1 = skewness(residuals(model1))
+print(skew_resid1)
+
+# -0.3509842
+# not skewed
+
+# 6. 2-way ANOVA, sport as first predictor
 
 yale = yale[which(yale$Sport %in% c("Baseball", "Football")),]
 yale$Year = as.factor(yale$Year)
-aov(Height~Sport + Year, data=yale)
+model_sport_year = aov(Height ~ Sport + Year, data=yale)
+
+
+print(summary(model_sport_year))
+p_sport_first = summary(model_sport_year)[[1]]["Sport", "Pr(>F)"]
+cat("P-value:", p_sport_first,"f", "\n")
 
 # 7. 2-way ANOVA but reverse the order of the predictor
+
+model_year_sport = aov(Height ~ Year + Sport, data = yale)
+print(summary(model_year_sport))
+p_sport_second = summary(model_year_sport)[[1]]["Sport", "Pr(>F)"]
+cat("P-value:", p_sport_second, "\n")
 
 # 8. rerun both 2-way ANOVAs, but as type-II ANOVA
 
