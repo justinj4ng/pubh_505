@@ -6,6 +6,7 @@ rm(list=ls())
 graphics.off()
 
 library(moments)
+library(car)
 setwd("~/pubh_505")
 
 # 1. subsetting
@@ -92,5 +93,13 @@ p_sport_second = summary(model_year_sport)[[1]]["Sport", "Pr(>F)"]
 cat("P-value:", p_sport_second, "\n")
 
 # 8. rerun both 2-way ANOVAs, but as type-II ANOVA
+type2_sport_year = car::Anova(model_sport_year, type = 2)
+type2_year_sport = car::Anova(model_year_sport, type = 2)
 
+print(type2_sport_year)
+print(type2_year_sport)
 
+cat("Sport + Year p-value:",
+    type2_sport_year["Sport", "Pr(>F)"], "\n")
+cat(" Year + Sport p-value:",
+    type2_year_sport["Sport", "Pr(>F)"], "\n")
