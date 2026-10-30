@@ -23,6 +23,7 @@ foot = yale$Height[yale$Sport == "Football"]
 cat(length(base),"baseball observations\n")
 cat(length(foot),"football observation\n")
 
+# OUTPUT:
 # 79 baseball observations
 # 369 football observation
 
@@ -35,7 +36,6 @@ skew_base = abs(skewness(base, na.rm = T))
 skew_foot = abs(skewness(foot, na.rm = T))
 # 0.3848342
 
-# print interpretation
 
 # F-test to compare variances
 Ftest = var.test(base, foot)
@@ -51,7 +51,11 @@ cat("P-value:",
     "; there is insufficient evidence that the variances differ.")
 
 # OUTPUT:
-# 
+# Skewness of baseball heights 0.2161072 
+# Skewness of baseball heights 0.2161072 
+# The distributions of baseball and football heights are sufficiently homoskedastic.
+# P-value: 0.4667399 ; there is insufficient evidence that the variances differ.
+
 
 # 3. hypothesis test. t-test
 
@@ -80,18 +84,19 @@ cat("P-value:", p_anova1,
     "; there is insufficient evidence of a statistically significant difference in mean height between baseball and football players ",
     "\n")
 
+# OUTPUT:
+# P-value: 2.788889e-57 ; there is insufficient evidence of a statistically significant difference in mean height between baseball and football players  
 
 # 5. test skewness of residuals, is ANOVA justified?
 
 skew_resid1 = skewness(residuals(model1))
 print(skew_resid1)
 
-cat
-# -0.3509842
-# not skewed
+cat("residual skewness:", skew_resid1, 
+    "; the residuals are approximately Normal, so ANOVA is justified \n")
 
 # OUTPUT:
-# 
+# residual skewness: -0.2341761 ; the residuals are approximately Normal, so ANOVA is justified 
 
 
 # 6. 2-way ANOVA, sport as first predictor
@@ -103,19 +108,25 @@ model_sport_year = aov(Height ~ Sport + Year, data=yale)
 
 print(summary(model_sport_year))
 p_sport_first = summary(model_sport_year)[[1]]["Sport", "Pr(>F)"]
-cat("P-value:", p_sport_first,"f", "\n")
+cat("P-value:", p_sport_first,
+    "; there is no significant difference in height between baseball and football heights\n")
 
 # OUTPUT:
-# P-value: 0.1605279 f  
+# P-value: 0.1605279 ; there is no significant difference in height between baseball and football heights
+
+
+
 # 7. 2-way ANOVA but reverse the order of the predictor
 
 model_year_sport = aov(Height ~ Year + Sport, data = yale)
 print(summary(model_year_sport))
 p_sport_second = summary(model_year_sport)[[1]]["Sport", "Pr(>F)"]
-cat("P-value:", p_sport_second, "\n")
+cat("P-value:", p_sport_second, "; there is not a statistically significant difference in heights between baseball and football\n")
 
 # OUTPUT:
-#P-value: 0.1331922
+# P-value: 0.1331922 ; there is not a statistically significant difference in heights between baseball and football
+
+
 
 # 8. rerun both 2-way ANOVAs, but as type-II ANOVA
 type2_sport_year = car::Anova(model_sport_year, type = 2)
@@ -128,7 +139,9 @@ cat("Sport + Year p-value:",
     type2_sport_year["Sport", "Pr(>F)"], "\n")
 cat("Year + Sport p-value:",
     type2_year_sport["Sport", "Pr(>F)"], "\n")
+cat("Both p-values are identical.We fail to reject the null hypothesis; there is no statistically significant difference in height between baseball and football players")
 
 # OUTPUT:
 # Sport + Year p-value: 0.1331922 
 # Year + Sport p-value: 0.1331922 
+# Both p-values are identical.We fail to reject the null hypothesis; there is no statistically significant difference in height between baseball and football players
