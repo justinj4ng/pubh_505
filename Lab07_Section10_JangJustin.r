@@ -5,7 +5,7 @@
 rm(list=ls())
 graphics.off()
 
-library(correplot)  
+library(corrplot)  
 
 # 0. set the working directory
 setwd("~/pubh_505")
@@ -60,4 +60,6 @@ cat(cols, "variables after subsetting")
 
 
 # 5. correlation
-cor(nhanes)
+nhanes_numeric <- nhanes[, sapply(nhanes, is.numeric)]
+nhanes_corr_matrix = cor(nhanes_numeric, use = "pairwise.complete.obs")
+corrplot(nhanes)
