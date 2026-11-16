@@ -37,7 +37,7 @@ cat(cols, "variables after cleaning")
 
 #subset to adults
 nhanes = nhanes[nhanes$ridageyr >= 18 & nhanes$ridageyr <= 40 & nhanes$riagendr == 1,]
-
+nhanes = na.omit(nhanes)
 # dimensionality of subsetted df
 rows = nrow(nhanes)
 cols = ncol(nhanes)
@@ -61,10 +61,61 @@ cat(cols, "variables after subsetting")
 
 
 # 5. correlation
-nhanes_numeric <- nhanes[, sapply(nhanes, is.numeric)]
+# build corrplot
+nhanes_numeric = nhanes[, sapply(nhanes, is.numeric)]
 nhanes_corr_matrix = cor(nhanes_numeric, use = "pairwise.complete.obs")
 corrplot(nhanes_corr_matrix)
 
 
 # report which variables co-cluster with bmxht, bmxwt.
-# 6. 
+corrplot(nhanes_corr_matrix, order = "hclust")
+#hclust for hierarchical clustering
+
+print("bmxwt co-clusters with bmxarmc, bmxbmi, bmxwaist")
+print("bmxht co-clusters with bmxleg and bmxarml")
+
+### OUTPUT:
+# bmxwt co-clusters with bmxarmc, bmxbmi, bmxwaist
+# bmxht co-clusters with bmxleg and bmxarml
+
+
+# 6. lin reg
+
+linmod = lm(bmxwt ~ bmxht, data = nhanes)
+# summary(linmod)
+
+slope = coef(linmod)['bmxht'] # call x var for the slope
+
+cat("The slope coefficient between wt and ht:", slope, "kg/cm")
+
+# 7. lin reg add ridageyr as covariate
+
+linmod_age = lm(bmxwt ~ bmxht + ridageyr, data = nhanes)
+# summary(linmod_age)
+
+### OUTPUT:
+
+slope = coef(linmod_age)['bmxht'] # call x var for the slope
+
+cat("The slope coefficient between wt and ht:", slope, "kg/cm")
+
+####ROUND FOR POST-LAB SUBMISSION
+
+### OUTPUT:
+
+
+
+# 8. lin reg, include survey weights
+linmod_weighted_simple = lm(
+  bmxwt ~ bmxht + ridageyr,
+  data = nhanes,
+  weights = wtmec2yr
+)
+
+slope = coef(linmod_weighted_simple)['bmxht'] # call x var for the slope
+
+cat("The slope coefficient between wt and ht:", slope, "kg/cm")
+
+
+
+
