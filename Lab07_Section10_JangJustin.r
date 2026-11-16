@@ -26,11 +26,12 @@ cat(cols, "variables")
 
 # 2.remove NA values
 nhanes = nhanes[,colMeans(is.na(nhanes)) <= 0.5]
-  
+cols = ncol(nhanes)
+
 cat(cols, "variables after cleaning")
 
 ### OUTPUT:
-# 32 variables after cleaning
+# 9 variables after cleaning
 
 # 3. subset to adult males
 
@@ -62,4 +63,8 @@ cat(cols, "variables after subsetting")
 # 5. correlation
 nhanes_numeric <- nhanes[, sapply(nhanes, is.numeric)]
 nhanes_corr_matrix = cor(nhanes_numeric, use = "pairwise.complete.obs")
-corrplot(nhanes)
+corrplot(nhanes_corr_matrix)
+
+
+# report which variables co-cluster with bmxht, bmxwt.
+# 6. 
