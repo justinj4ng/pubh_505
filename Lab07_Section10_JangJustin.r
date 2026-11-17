@@ -15,23 +15,25 @@ nhanes = read.csv("NHANES_DemoBMX.csv")
 rows = nrow(nhanes)
 cols = ncol(nhanes)
 
-cat(rows,"observations")
-cat(cols, "variables")
+cat(rows,"observations\n")
+cat(cols, "variables\n")
 
 ### OUTPUT:
-# 9338 observations> cat(cols, "variables")
+# 9338 observations
 # 32 variables
 
 
 
-# 2.remove NA values
+# 2.remove missing values
 nhanes = nhanes[,colMeans(is.na(nhanes)) <= 0.5]
 cols = ncol(nhanes)
 
-cat(cols, "variables after cleaning")
+cat(cols, "variables after excluding variables with >50% missing values\n")
 
 ### OUTPUT:
-# 9 variables after cleaning
+# 25 variables after excluding variables with >50% missing values
+
+
 
 # 3. subset to adult males
 
@@ -46,15 +48,18 @@ cat(rows,"observations after subsetting")
 cat(cols, "variables after subsetting")
 
 ### OUTPUT
-# 1149 observations after subsetting
+# 941 observations after subsetting
 # 25 variables after subsetting
 
 
 # 4. Keep only certain columns
-nhanes = nhanes[, c("ridageyr", "wtmec2yr", grep("bmx", names(nhanes), value = TRUE)), drop = FALSE]
+nhanes = nhanes[, c("ridageyr", "wtmec2yr", grep("bmx", names(nhanes),
+                ignore.case = TRUE,value = TRUE)), drop = FALSE]
+
 cols = ncol(nhanes)
 
-cat(cols, "variables after subsetting")
+cat(cols, "variables remain: age in years, 2-year MEC survey weight,
+    and body-composition measures\n")
 
 ### OUTPUT:
 # 9 variables after subsetting
@@ -68,8 +73,24 @@ corrplot(nhanes_corr_matrix)
 
 
 # report which variables co-cluster with bmxht, bmxwt.
-corrplot(nhanes_corr_matrix, order = "hclust")
+corrplot(nhanes_corr_matrix, 
+         order = "hclust",
+         method = "color",
+         
+         title = "Correlation Matrix of Age, Survey Weight, and Body-Composition Measures",
+         mar = c(0, 0, 2, 0)
+         )
 #hclust for hierarchical clustering
+
+# hc <- hclust(as.dist(1 - nhanes_corr_matrix), method = "complete")
+# plot(
+#   hc,
+#   main = "Hierarchical Clustering of NHANES Variables",
+#   xlab = "",
+#   sub = "",
+#   ylab = "Correlation-based distance"
+# )
+
 
 print("bmxwt co-clusters with bmxarmc, bmxbmi, bmxwaist")
 print("bmxht co-clusters with bmxleg and bmxarml")
