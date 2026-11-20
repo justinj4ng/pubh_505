@@ -44,8 +44,8 @@ nhanes = na.omit(nhanes)
 rows = nrow(nhanes)
 cols = ncol(nhanes)
 
-cat(rows,"observations after subsetting")
-cat(cols, "variables after subsetting")
+cat(rows,"observations after subsetting\n")
+cat(cols, "variables after subsetting\n")
 
 ### OUTPUT
 # 941 observations after subsetting
@@ -58,8 +58,7 @@ nhanes = nhanes[, c("ridageyr", "wtmec2yr", grep("bmx", names(nhanes),
 
 cols = ncol(nhanes)
 
-cat(cols, "variables remain: age in years, 2-year MEC survey weight,
-    and body-composition measures\n")
+cat(cols, "variables after subsetting\n")
 
 ### OUTPUT:
 # 9 variables after subsetting
@@ -69,7 +68,7 @@ cat(cols, "variables remain: age in years, 2-year MEC survey weight,
 # build corrplot
 nhanes_numeric = nhanes[, sapply(nhanes, is.numeric)]
 nhanes_corr_matrix = cor(nhanes_numeric, use = "pairwise.complete.obs")
-corrplot(nhanes_corr_matrix)
+# corrplot(nhanes_corr_matrix)
 
 
 # report which variables co-cluster with bmxht, bmxwt.
@@ -106,8 +105,15 @@ linmod = lm(bmxwt ~ bmxht, data = nhanes)
 # summary(linmod)
 
 slope = coef(linmod)['bmxht'] # call x var for the slope
+slope = round(slope, digits = 3)
 
-cat("The slope coefficient between wt and ht:", slope, "kg/cm")
+cat("The slope coefficient between wt and ht:", slope, "kg/cm\n")
+cat("Every 1 cm of height is associated with a", slope,"kg increase in weight\n")
+ 
+### OUTPUT:
+# The slope coefficient between wt and ht: 1.093 kg/cm
+# Every 1 cm of height is associated with a 1.093 kg increase in weight
+
 
 # 7. lin reg add ridageyr as covariate
 
@@ -117,13 +123,14 @@ linmod_age = lm(bmxwt ~ bmxht + ridageyr, data = nhanes)
 ### OUTPUT:
 
 slope = coef(linmod_age)['bmxht'] # call x var for the slope
+slope = round(slope, digits = 3)
 
-cat("The slope coefficient between wt and ht:", slope, "kg/cm")
-
-####ROUND FOR POST-LAB SUBMISSION
+cat("The slope coefficient between wt and ht:", slope, "kg/cm\n")
+cat("Every 1 cm of height is associated with", slope, "kg increase, adjusted for age\n")
 
 ### OUTPUT:
-
+# The slope coefficient between wt and ht: 1.085 kg/cm
+# Every 1 cm of height is associated with 1.085 increase in weight, adjusted for age
 
 
 # 8. lin reg, include survey weights
@@ -134,9 +141,10 @@ linmod_weighted_simple = lm(
 )
 
 slope = coef(linmod_weighted_simple)['bmxht'] # call x var for the slope
+slope = round(slope, digits = 3)
+
 
 cat("The slope coefficient between wt and ht:", slope, "kg/cm")
-
-
+cat("Every 1 cm of height is associated with ",slope, "kg increase, weighted by ")
 
 
