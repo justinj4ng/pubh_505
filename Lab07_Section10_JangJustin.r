@@ -144,7 +144,9 @@ slope = coef(linmod_weighted_simple)['bmxht'] # call x var for the slope
 slope = round(slope, digits = 3)
 
 
-cat("The slope coefficient between wt and ht:", slope, "kg/cm")
-cat("Every 1 cm of height is associated with ",slope, "kg increase, weighted by ")
+cat("The slope coefficient between wt and ht:", slope, "kg/cm\n")
+cat("Every 1 cm of height is associated with ",slope, "kg increase, adjusted for age and survey weights\n ")
 
-
+# OUTPUT:
+# The slope coefficient between wt and ht: 0.828 kg/cm
+# Every 1 cm of height is associated with  0.828 kg increase, adjusted for age and survey weights
